@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Admin – Forest Service Nepal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <style>
+    body{background:var(--paper)}
+    .bar{position:sticky;top:0;z-index:40;background:var(--green);color:#fff;padding:12px 0}.bar .container{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .bar a,.bar button{color:#fff;font-weight:600}
+    .box{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px;margin:0 0 22px}
+    .login{max-width:380px;margin:80px auto}
+    .admin-shell{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start;max-width:1400px;margin:24px auto;padding:0 16px}
+    .admin-sidebar{position:sticky;top:76px;display:grid;gap:4px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:var(--r)}
+    .admin-nav-link{padding:10px 12px;text-align:left;border-radius:var(--r);font-weight:600;color:var(--ink)}
+    .admin-nav-link:hover,.admin-nav-link.on{background:var(--leaf);color:var(--green)}
+    .admin-content{min-width:0}.admin-content>.box{margin:0 0 22px}
+    .view-heading{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .view-heading h1{font-size:1.45rem;color:var(--green)}
+    .back-button{padding:7px 11px;border:1px solid var(--line);border-radius:var(--r);background:#fff;font-weight:600}
+    .social-form{max-width:720px}.social-help{color:var(--muted);margin-bottom:14px}
+    .social-list{display:grid;gap:10px}.social-entry{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:var(--r);background:#fff;min-width:0}
+    .social-entry-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;color:var(--green);font-size:1.2rem}
+    .social-entry-icon img{max-width:100%;max-height:100%;object-fit:contain}
+    .social-entry-info{min-width:0;flex:1}.social-entry-info strong,.social-entry-info a{display:block;overflow-wrap:anywhere}
+    .social-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .social-preview{display:flex;align-items:center;gap:12px;color:var(--green);padding:10px;border:1px dashed var(--line);border-radius:var(--r)}
+    .social-preview img{width:36px;height:36px;object-fit:contain}
+    .submission-help{padding:12px;background:var(--leaf);border-radius:var(--r);margin:0 0 14px;color:var(--ink)}
+    table{width:100%;border-collapse:collapse;font-size:.92rem}
+    th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+    td .row{display:flex;gap:8px}
+    .sm{padding:4px 10px;border:1px solid var(--line);border-radius:var(--r);background:#fff;font-size:.85rem}
+    .sm.del{color:#8a1c1c}.tag{font-size:.75rem;background:var(--leaf);color:var(--green);padding:2px 8px;border-radius:99px}
+    .tag.off{background:#eee;color:#666}
+    .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .tbl{overflow-x:auto}
+    @media(max-width:760px){.admin-shell{display:block;margin:16px auto}.admin-sidebar{position:sticky;top:53px;z-index:30;display:flex;overflow-x:auto;gap:4px;margin-bottom:16px}.admin-nav-link{white-space:nowrap}.cols{grid-template-columns:1fr}.box{padding:16px}.view-heading{align-items:flex-start;flex-direction:column;gap:8px}.social-entry{align-items:flex-start;flex-wrap:wrap}.social-actions{width:100%}.social-actions button{flex:1}.tbl{margin-inline:-8px}th,td{padding:8px 6px}}
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(() => {
+  const app = document.getElementById('app');
+  const TYPES = { update: 'Updates', highlight: 'Highlights ticker', article: 'Articles', news: 'News', opportunity: 'Opportunities', video: 'Videos', resource: 'Resources / files', submissions: 'Submissions' };
+  let tab = 'update', items = [], subs = [], social = [], adminView = 'list', editing = null, socialDraft = null;
+  const el = (t, a = {}, ...k) => { const e = document.createElement(t); for (const [n, v] of Object.entries(a)) { if (n === 'class') e.className = v; else if (n.startsWith('on')) e.addEventListener(n.slice(2), v); else if (v !== false && v != null) e.setAttribute(n, v === true ? '' : v); } k.flat().forEach(c => e.append(c)); return e; };
+  const api = async (path, method = 'GET', data, raw) => {
+    const h = { 'X-Requested-With': 'fsn' }; if (data && !raw) h['Content-Type'] = 'application/json';
+    const r = await fetch('/api/' + path, { method, headers: { ...h, ...(raw || {}) }, body: raw ? data : data ? JSON.stringify(data) : undefined });
+    const j = await r.json().catch(() => ({})); if (!r.ok) { const e = new Error(j.error || 'Request failed'); e.status = r.status; throw e; } return j;
+  };
+  const toast = (m, err) => { const t = el('div', { class: 'msg' + (err ? ' err' : ''), style: 'position:fixed;right:16px;bottom:16px;z-index:99;box-shadow:0 4px 16px rgba(0,0,0,.2)' }, m); document.body.append(t); setTimeout(() => t.remove(), 3200); };
+
+  function loginView(note) {
+    const f = el('form', { class: 'box login form', onsubmit: async e => {
+      e.preventDefault(); const d = Object.fromEntries(new FormData(f));
+      try { await api('login', 'POST', d); start(); } catch (x) { m.textContent = x.message; m.hidden = false; }
+    } }, el('h2', {}, 'Admin login'),
+      el('label', {}, 'Username', el('input', { name: 'username', autocomplete: 'username', required: true })),
+      el('label', {}, 'Password', el('input', { name: 'password', type: 'password', autocomplete: 'current-password', required: true })),
+      el('button', { class: 'btn', type: 'submit' }, 'Log in'));
+    const m = el('p', { class: 'msg err', hidden: true }); if (note) { m.textContent = note; m.hidden = false; }
+    f.append(m); app.replaceChildren(f);
+  }
+
+  async function refresh() { [items, subs, social] = await Promise.all([api('admin/items'), api('admin/submissions'), api('admin/social')]); draw(); }
+
+  function draw() {
+    const bar = el('div', { class: 'bar' }, el('div', { class: 'container' }, el('strong', {}, 'Forest Service Nepal – Admin'),
+      el('span', {}, el('a', { href: '/', target: '_blank' }, 'View site'), '  ·  ', el('button', { onclick: async () => { await api('logout', 'POST', {}); loginView(); } }, 'Log out'))));
+    const sidebar = el('nav', { class: 'admin-sidebar', 'aria-label': 'Admin sections' },
+      [...Object.entries(TYPES), ['social', 'Social links']].map(([k, label]) =>
+        el('button', { class: 'admin-nav-link' + (k === tab ? ' on' : ''), onclick: () => { tab = k; adminView = 'list'; editing = null; socialDraft = null; draw(); } },
+          label + (k === 'submissions' ? ` (${subs.length})` : ''))));
+    const panel = adminView === 'editor' ? editorView(editing) : tab === 'submissions' ? subView() : tab === 'social' ? socialView() : listView();
+    app.replaceChildren(bar, el('div', { class: 'admin-shell' }, sidebar, el('main', { class: 'admin-content' }, panel)));
+  }
+
+  function listView() {
+    const rows = items.filter(i => i.type === tab);
+    const t = el('table', {}, el('thead', {}, el('tr', {}, ['Date', 'Title', 'Status', ''].map(h => el('th', {}, h)))),
+      el('tbody', {}, rows.length ? rows.map(i => el('tr', {}, el('td', {}, i.date), el('td', {}, i.title), el('td', {}, el('span', { class: 'tag' + (i.published ? '' : ' off') }, i.published ? 'Published' : 'Draft')),
+        el('td', {}, el('div', { class: 'row' }, el('button', { class: 'sm', onclick: () => editor(i) }, 'Edit'),
+        el('button', { class: 'sm del', onclick: async () => { if (confirm('Delete "' + i.title + '"?')) { try { await api('admin/items/' + i.id, 'DELETE'); toast('Deleted'); await refresh(); } catch (e) { toast(e.message, true); } } } }, 'Delete'))))) :
+        el('tr', {}, el('td', { colspan: 4 }, 'Nothing here yet.'))));
+    return el('div', { class: 'box' }, el('div', { style: 'display:flex;justify-content:space-between;margin-bottom:14px' }, el('h2', { style: 'margin:0;font-size:1.4rem' }, TYPES[tab]),
+      el('button', { class: 'btn', onclick: () => editor({ type: tab, published: true, date: new Date().toISOString().slice(0, 10) }) }, 'Add new')), el('div', { class: 'tbl' }, t));
+  }
+
+  function subView() {
+    return el('div', { class: 'box' }, el('h2', { style: 'font-size:1.4rem' }, 'Public submissions'),
+      el('p', { class: 'submission-help' }, 'Visitors can send article or news drafts from the website. Submissions wait here and are not public until you approve them. “Approve & publish” adds the text to the matching public section; “Reject” permanently removes it.'),
+      subs.length ? subs.map(s => el('div', { style: 'border-top:1px solid var(--line);padding:14px 0' },
+      el('span', { class: 'tag' }, s.type), ' ', el('strong', {}, s.title), el('div', { style: 'color:var(--muted);font-size:.85rem' }, `${s.name}${s.email ? ' · ' + s.email : ''} · ${s.date}`),
+      el('p', { style: 'white-space:pre-wrap;margin:8px 0;max-height:160px;overflow:auto' }, s.body), s.link ? el('p', {}, 'Link: ', el('a', { href: s.link, target: '_blank', rel: 'noopener noreferrer nofollow' }, s.link)) : '',
+      el('div', { class: 'row', style: 'display:flex;gap:8px' }, el('button', { class: 'sm', onclick: async () => { try { await api(`admin/submissions/${s.id}/approve`, 'POST', {}); toast('Published'); await refresh(); } catch (e) { toast(e.message, true); } } }, 'Approve & publish'),
+        el('button', { class: 'sm del', onclick: async () => { if (confirm('Reject this submission?')) { try { await api('admin/submissions/' + s.id, 'DELETE'); await refresh(); } catch (e) { toast(e.message, true); } } } }, 'Reject')))) : el('p', {}, 'No pending submissions.'));
+  }
+
+  function socialView() {
+    const section = el('section', { class: 'box' });
+    section.append(el('div', { style: 'display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px' },
+      el('h1', { style: 'font-size:1.4rem;color:var(--green)' }, 'Social links'),
+      el('button', { class: 'btn', onclick: () => { socialDraft = {}; draw(); } }, 'Add new')));
+    section.append(el('p', { class: 'social-help' }, 'Add links to any social profile or website. Choose a Font Awesome icon class or provide an image URL/upload; each link appears in the website footer.'));
+    if (socialDraft) {
+      section.append(socialEditor(socialDraft));
+    } else if (social.length) {
+      section.append(el('div', { class: 'social-list' }, social.map(item => el('div', { class: 'social-entry' },
+        socialIcon(item),
+        el('div', { class: 'social-entry-info' }, el('strong', {}, item.name),
+          el('a', { href: item.url, target: '_blank', rel: 'noopener noreferrer' }, item.url)),
+        el('div', { class: 'social-actions' },
+          el('button', { class: 'sm', onclick: () => { socialDraft = { ...item }; draw(); } }, 'Edit'),
+          el('button', { class: 'sm del', onclick: async () => {
+            if (!confirm(`Delete the ${item.name} link?`)) return;
+            try { social = await api('admin/social', 'PUT', social.filter(link => link.id !== item.id)); toast('Link deleted'); draw(); }
+            catch (error) { toast(error.message, true); }
+          } }, 'Delete'))))));
+    } else {
+      section.append(el('p', { class: 'empty' }, 'No social links added yet.'));
+    }
+    return section;
+  }
+
+  function socialIcon(item) {
+    const icon = el('span', { class: 'social-entry-icon' });
+    if (item.imageUrl) icon.append(el('img', { src: item.imageUrl, alt: '' }));
+    else icon.append(el('i', { class: item.iconClass, 'aria-hidden': 'true' }));
+    return icon;
+  }
+
+  function socialEditor(item) {
+    const form = el('form', { class: 'form social-form' });
+    const name = el('input', { name: 'name', value: item.name || '', maxlength: 80, required: true, placeholder: 'e.g. Facebook' });
+    const url = el('input', { name: 'url', type: 'url', value: item.url || '', maxlength: 500, required: true, placeholder: 'https://example.com/your-profile' });
+    const iconClass = el('input', { name: 'iconClass', value: item.iconClass || '', maxlength: 120, placeholder: 'e.g. fa-brands fa-facebook-f' });
+    const imageUrl = el('input', { name: 'imageUrl', type: 'url', value: item.imageUrl || '', maxlength: 500, placeholder: 'https://example.com/icon.png' });
+    const preview = el('div', { class: 'social-preview' }, 'Icon preview');
+    const updatePreview = () => {
+      preview.replaceChildren();
+      if (imageUrl.value) preview.append(el('img', { src: imageUrl.value, alt: '' }));
+      else if (iconClass.value) preview.append(el('i', { class: iconClass.value, 'aria-hidden': 'true' }));
+      else preview.append(el('span', {}, 'Enter a Font Awesome class or image URL to preview.'));
+      preview.append(el('span', {}, name.value || 'Social link'));
+    };
+    name.addEventListener('input', updatePreview);
+    iconClass.addEventListener('input', updatePreview);
+    imageUrl.addEventListener('input', updatePreview);
+    const upload = el('input', { type: 'file', accept: '.png,.jpg,.jpeg,.webp' });
+    upload.addEventListener('change', async () => {
+      const file = upload.files[0];
+      if (!file) return;
+      try {
+        const result = await api('admin/upload', 'POST', file, {
+          'X-Filename': encodeURIComponent(file.name), 'Content-Type': 'application/octet-stream'
+        });
+        imageUrl.value = new URL(result.url, location.origin).href;
+        updatePreview();
+        toast('Icon image uploaded');
+      } catch (error) { toast(error.message, true); }
+    });
+    form.append(
+      el('p', { class: 'social-help' }, 'Enter a destination link and either a Font Awesome class or an image URL. You can also upload an image.'),
+      el('label', {}, 'Link name', name),
+      el('label', {}, 'Destination URL', url),
+      el('label', {}, 'Font Awesome class (optional)', iconClass),
+      el('label', {}, 'Image URL (optional)', imageUrl),
+      el('label', {}, 'Or upload an icon image (PNG, JPG or WebP)', upload),
+      preview,
+      el('div', { style: 'display:flex;gap:10px;flex-wrap:wrap' },
+        el('button', { class: 'btn', type: 'submit' }, item.id ? 'Save link' : 'Add link'),
+        el('button', { class: 'sm', type: 'button', onclick: () => { socialDraft = null; draw(); } }, 'Cancel')));
+    updatePreview();
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const values = Object.fromEntries(new FormData(form));
+      const updated = item.id
+        ? social.map(link => link.id === item.id ? { ...values, id: item.id } : link)
+        : [...social, values];
+      try {
+        social = await api('admin/social', 'PUT', updated);
+        socialDraft = null;
+        toast(item.id ? 'Social link saved' : 'Social link added');
+        draw();
+      } catch (error) { toast(error.message, true); }
+    });
+    return form;
+  }
+
+  function editor(i) {
+    editing = i;
+    adminView = 'editor';
+    draw();
+  }
+
+  function editorView(i) {
+    const isNew = !i.id, f = el('form', { class: 'form', style: 'max-width:none' });
+    const fld = (label, name, tag = 'input', a = {}) => el('label', {}, label, el(tag, { name, ...a }, ...(tag === 'textarea' ? [i[name] || ''] : [])));
+    const set = (n, v) => { const x = f.elements[n]; if (x && v != null) x.value = v; };
+    const typeSel = el('select', { name: 'type' }, Object.entries(TYPES).filter(([k]) => k !== 'submissions').map(([k, v]) => el('option', { value: k, selected: k === i.type }, v)));
+    const file = el('input', { type: 'file', accept: '.pdf,.doc,.docx,.png,.jpg,.jpeg,.webp' });
+    file.addEventListener('change', async () => {
+      const x = file.files[0]; if (!x) return;
+      try { const r = await api('admin/upload', 'POST', x, { 'X-Filename': encodeURIComponent(x.name), 'Content-Type': 'application/octet-stream' }); f.elements.url.value = r.url;
+        const ext = x.name.split('.').pop().toUpperCase(); if (!f.elements.fileType.value) f.elements.fileType.value = ext === 'DOCX' ? 'DOC' : ext; toast('File uploaded'); } catch (e) { toast(e.message, true); }
+    });
+    f.append(el('div', { class: 'cols' }, el('label', {}, 'Section', typeSel), fld('Date', 'date', 'input', { type: 'date', value: i.date, required: true })),
+      fld('Title (English)', 'title', 'input', { value: i.title || '', required: true, maxlength: 200 }), fld('Title (नेपाली, optional)', 'title_ne', 'input', { value: i.title_ne || '', maxlength: 200 }),
+      fld('Short summary', 'summary', 'textarea', { rows: 2, maxlength: 500 }), fld('Full text (articles / news)', 'body', 'textarea', { rows: 9 }),
+      el('div', { class: 'cols' }, fld('Link / file URL (video link, PDF, external page)', 'url', 'input', { value: i.url || '', maxlength: 500 }), fld('File type label (PDF, DOC)', 'fileType', 'input', { value: i.fileType || '', maxlength: 8 })),
+      el('label', {}, 'Or upload a file (PDF, DOC, image – max 25 MB)', file),
+      el('label', { style: 'display:flex;gap:8px;align-items:center' }, el('input', { type: 'checkbox', name: 'published', checked: i.published !== false }), 'Published (visible on the site)'),
+      el('div', { style: 'display:flex;gap:10px' }, el('button', { class: 'btn', type: 'submit' }, isNew ? 'Create' : 'Save changes'), el('button', { class: 'sm', type: 'button', onclick: () => { adminView = 'list'; editing = null; draw(); } }, 'Cancel')));
+    f.addEventListener('submit', async e => {
+      e.preventDefault(); const d = Object.fromEntries(new FormData(f)); d.published = f.elements.published.checked;
+      try {
+        await (isNew ? api('admin/items', 'POST', d) : api('admin/items/' + i.id, 'PUT', d));
+        tab = d.type; adminView = 'list'; editing = null; toast(isNew ? 'Created' : 'Saved'); await refresh();
+      } catch (x) { toast(x.message, true); }
+    });
+    return [
+      el('div', { class: 'view-heading' },
+        el('button', { class: 'back-button', type: 'button', onclick: () => { adminView = 'list'; editing = null; draw(); } }, `← Back to ${TYPES[tab]}`),
+        el('h1', {}, isNew ? 'New item' : 'Edit item')),
+      el('section', { class: 'box' }, f)
+    ];
+  }
+
+  async function start() { try { await refresh(); } catch (e) { loginView(e.status === 401 ? '' : e.message); } }
+  fetch('/api/me').then(r => r.json()).then(r => r.admin ? start() : loginView());
+})();
+</script>
+</body>
+</html>

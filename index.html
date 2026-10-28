@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Forest Service Nepal</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+
+      <span id="current-date"></span>
+
+      <div class="language-selector">
+        <button class="language-btn active" data-lang="en">English</button>
+        <span>|</span>
+        <button class="language-btn" data-lang="ne">नेपाली</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- HEADER -->
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <a href="#" class="brand">
+
+        <img
+          src="images/forest-service-nepal-logo.png"
+          alt="Forest Service Nepal Logo"
+        >
+
+        <div class="brand-text">
+
+          <h1>Forest Service Nepal</h1>
+
+          <p>
+            Learn. Prepare. Stay Informed.
+          </p>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- NAVIGATION -->
+  <nav class="main-nav">
+
+    <div class="container nav-inner">
+
+      <a href="#home" class="nav-link" data-section="home">
+        Home
+      </a>
+
+
+      <!-- LOKSEWA -->
+      <div class="nav-item">
+
+        <button class="nav-link dropdown-button" data-section="learning">
+          Loksewa <span>▾</span>
+        </button>
+
+        <div class="dropdown-menu wide-menu">
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Federal Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Koshi Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Madhesh Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Bagmati Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Gandaki Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Lumbini Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Karnali Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+
+          <div class="submenu-item">
+
+            <a href="#">
+              Sudurpaschim Province Loksewa Aayog <span>▸</span>
+            </a>
+
+            <div class="sub-dropdown">
+              <a href="#">Annual Schedule</a>
+              <a href="#">Syllabus</a>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- LAWS -->
+      <div class="nav-item">
+
+        <button class="nav-link dropdown-button">
+          Laws & Acts <span>▾</span>
+        </button>
+
+        <div class="dropdown-menu">
+
+          <a href="#">Federal</a>
+          <a href="#">Koshi Province</a>
+          <a href="#">Madhesh Province</a>
+          <a href="#">Bagmati Province</a>
+          <a href="#">Gandaki Province</a>
+          <a href="#">Lumbini Province</a>
+          <a href="#">Karnali Province</a>
+          <a href="#">Sudurpaschim Province</a>
+
+        </div>
+
+      </div>
+
+
+      <a href="#articles" class="nav-link" data-section="articles">
+        Blog/Articles
+      </a>
+
+      <a href="#news" class="nav-link" data-section="news">
+        News
+      </a>
+
+      <a href="#opportunities" class="nav-link" data-section="opportunities">
+        Opportunities
+      </a>
+
+
+      <!-- SEARCH -->
+      <button class="search-button" aria-label="Search" aria-controls="site-search-form" aria-expanded="false">
+
+        <svg viewBox="0 0 24 24">
+
+          <circle
+            cx="10.8"
+            cy="10.8"
+            r="6.8">
+          </circle>
+
+          <line
+            x1="16"
+            y1="16"
+            x2="21"
+            y2="21">
+          </line>
+
+        </svg>
+
+      </button>
+
+    </div>
+
+  </nav>
+
+  <section class="nav-content-panel" id="nav-content-panel" aria-live="polite" hidden>
+    <div class="container nav-content-inner"></div>
+  </section>
+
+  <form class="site-search-form" id="site-search-form" role="search" hidden>
+    <div class="container site-search-inner">
+      <label for="site-search-input">Search the website</label>
+      <input id="site-search-input" name="q" type="search" placeholder="Enter a title or keyword" required>
+      <button class="btn" type="submit">Search</button>
+      <button class="site-search-close" type="button">Close</button>
+    </div>
+  </form>
+
+
+  <main>
+
+
+    <!-- HIGHLIGHTS -->
+    <section class="highlights">
+
+      <div class="container highlights-inner">
+
+        <span class="highlights-label">
+          Highlights
+        </span>
+
+        <div class="ticker-window">
+
+          <div class="ticker-track">
+
+            <a href="#">
+              New Loksewa materials and updates
+            </a>
+
+            <a href="#">
+              New forestry opportunities
+            </a>
+
+            <a href="#">
+              New articles and learning resources
+            </a>
+
+            <a href="#">
+              New forms and documents
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- INTRODUCTION + UPDATES -->
+    <section class="intro-updates" id="home">
+
+      <div class="container intro-updates-grid">
+
+
+        <!-- INTRODUCTION -->
+        <div class="introduction">
+
+          <span class="eyebrow">
+            FOREST SERVICE NEPAL
+          </span>
+
+          <h2>
+            A place to learn, prepare and stay informed.
+          </h2>
+
+          <p>
+            Forest Service Nepal is an information and learning platform
+            for forestry students, Loksewa candidates, researchers,
+            professionals and anyone interested in forestry,
+            conservation and related subjects.
+          </p>
+
+          <a href="#" class="text-link">
+            Read More →
+          </a>
+
+        </div>
+
+
+        <!-- UPDATES -->
+        <div class="updates">
+
+          <div class="updates-header">
+
+            <div>
+
+              <span class="eyebrow">
+                LATEST WEBSITE ACTIVITY
+              </span>
+
+              <h2>
+                Updates
+              </h2>
+
+            </div>
+
+            <a href="#" class="see-all">
+              See All →
+            </a>
+
+          </div>
+
+
+          <div class="updates-list">
+
+            <a href="#" class="update-item">
+
+              <span class="update-date">
+                21 SEP
+              </span>
+
+              <span class="update-title">
+                Research Permission Form
+              </span>
+
+              <span class="update-arrow">
+                →
+              </span>
+
+            </a>
+
+
+            <a href="#" class="update-item">
+
+              <span class="update-date">
+                20 SEP
+              </span>
+
+              <span class="update-title">
+                New Loksewa Syllabus
+              </span>
+
+              <span class="update-arrow">
+                →
+              </span>
+
+            </a>
+
+
+            <a href="#" class="update-item">
+
+              <span class="update-date">
+                19 SEP
+              </span>
+
+              <span class="update-title">
+                Forestry Research Opportunity
+              </span>
+
+              <span class="update-arrow">
+                →
+              </span>
+
+            </a>
+
+
+            <a href="#" class="update-item">
+
+              <span class="update-date">
+                18 SEP
+              </span>
+
+              <span class="update-title">
+                New Forestry Article
+              </span>
+
+              <span class="update-arrow">
+                →
+              </span>
+
+            </a>
+
+
+            <a href="#" class="update-item">
+
+              <span class="update-date">
+                17 SEP
+              </span>
+
+              <span class="update-title">
+                New Additional Resource
+              </span>
+
+              <span class="update-arrow">
+                →
+              </span>
+
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- LEARNING RESOURCES -->
+    <section class="learning section" id="learning">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <span class="eyebrow">
+            STUDY MATERIALS
+          </span>
+
+          <h2>
+            Learning Resources
+          </h2>
+
+          <p>
+            Organized study materials for Loksewa and forestry education.
+          </p>
+
+        </div>
+
+
+        <div class="learning-grid">
+
+
+          <!-- LOKSEWA -->
+          <article class="learning-card">
+
+            <span class="card-number">
+              01
+            </span>
+
+            <h3>
+              Loksewa
+            </h3>
+
+            <p>
+              Preparation materials organized for objective and
+              subjective examinations.
+            </p>
+
+            <div class="resource-links">
+
+              <a href="#">Objective</a>
+
+              <a href="#">Subjective</a>
+
+              <a href="#">Past Questions</a>
+
+              <a href="#">Related Materials</a>
+
+            </div>
+
+          </article>
+
+
+          <!-- BSC -->
+          <article class="learning-card">
+
+            <span class="card-number">
+              02
+            </span>
+
+            <h3>
+              BSc Forestry
+            </h3>
+
+            <p>
+              Semester-wise notes, subject materials and past questions.
+            </p>
+
+            <div class="semester-grid">
+
+              <a href="#">Semester 1</a>
+              <a href="#">Semester 2</a>
+
+              <a href="#">Semester 3</a>
+              <a href="#">Semester 4</a>
+
+              <a href="#">Semester 5</a>
+              <a href="#">Semester 6</a>
+
+              <a href="#">Semester 7</a>
+              <a href="#">Semester 8</a>
+
+            </div>
+
+          </article>
+
+
+          <!-- MSC -->
+          <article class="learning-card">
+
+            <span class="card-number">
+              03
+            </span>
+
+            <h3>
+              MSc Forestry
+            </h3>
+
+            <p>
+              Semester-wise notes, materials and past questions.
+            </p>
+
+            <div class="semester-grid">
+
+              <a href="#">Semester 1</a>
+              <a href="#">Semester 2</a>
+
+              <a href="#">Semester 3</a>
+              <a href="#">Semester 4</a>
+
+            </div>
+
+          </article>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- BLOG / ARTICLES -->
+    <section class="portal-section section" id="articles">
+
+      <div class="container">
+
+        <div class="portal-heading">
+
+          <div>
+
+            <span class="eyebrow">
+              ARTICLES & KNOWLEDGE
+            </span>
+
+            <h2>
+              Blog / Articles
+            </h2>
+
+          </div>
+
+          <a href="#" class="see-all">
+            See All →
+          </a>
+
+        </div>
+
+
+        <div
+          class="latest-grid"
+          data-portal="articles">
+        </div>
+
+
+        <div class="submit-row">
+
+          <a href="#" class="submit-link">
+            Click here to submit Article/Blog →
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- NEWS -->
+    <section class="portal-section section alternate" id="news">
+
+      <div class="container">
+
+        <div class="portal-heading">
+
+          <div>
+
+            <span class="eyebrow">
+              LATEST INFORMATION
+            </span>
+
+            <h2>
+              Latest News
+            </h2>
+
+          </div>
+
+          <a href="#" class="see-all">
+            See All →
+          </a>
+
+        </div>
+
+
+        <div
+          class="latest-grid"
+          data-portal="news">
+        </div>
+
+
+        <div class="submit-row">
+
+          <a href="#" class="submit-link">
+            Click here to submit News →
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- OPPORTUNITIES -->
+    <section class="portal-section section" id="opportunities">
+
+      <div class="container">
+
+        <div class="portal-heading">
+
+          <div>
+
+            <span class="eyebrow">
+              CAREER & FUNDING
+            </span>
+
+            <h2>
+              Opportunities
+            </h2>
+
+          </div>
+
+          <a href="#" class="see-all">
+            See All →
+          </a>
+
+        </div>
+
+
+        <div
+          class="latest-grid"
+          data-portal="opportunities">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- VIDEOS -->
+    <section class="portal-section section alternate" id="videos">
+
+      <div class="container">
+
+        <div class="portal-heading">
+
+          <div>
+
+            <span class="eyebrow">
+              WATCH & LEARN
+            </span>
+
+            <h2>
+              Videos
+            </h2>
+
+          </div>
+
+          <a href="#" class="see-all">
+            See All →
+          </a>
+
+        </div>
+
+
+        <div
+          class="latest-grid"
+          data-portal="videos">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ADDITIONAL RESOURCES -->
+    <section
+      class="additional-resources section"
+      id="additional-resources">
+
+      <div class="container">
+
+        <div class="portal-heading">
+
+          <div>
+
+            <span class="eyebrow">
+              DOWNLOADS & DOCUMENTS
+            </span>
+
+            <h2>
+              Additional Resources
+            </h2>
+
+          </div>
+
+          <a href="#" class="see-all">
+            See All →
+          </a>
+
+        </div>
+
+
+        <div class="resource-grid">
+
+
+          <a href="#" class="additional-card">
+
+            <span class="resource-icon">
+              PDF
+            </span>
+
+            <span>
+
+              <strong>
+                Research Permission Form
+              </strong>
+
+              <small>
+                Download form →
+              </small>
+
+            </span>
+
+          </a>
+
+
+          <a href="#" class="additional-card">
+
+            <span class="resource-icon">
+              PDF
+            </span>
+
+            <span>
+
+              <strong>
+                Research Proposal Format
+              </strong>
+
+              <small>
+                Download document →
+              </small>
+
+            </span>
+
+          </a>
+
+
+          <a href="#" class="additional-card">
+
+            <span class="resource-icon">
+              PDF
+            </span>
+
+            <span>
+
+              <strong>
+                Forestry Guidelines
+              </strong>
+
+              <small>
+                View resource →
+              </small>
+
+            </span>
+
+          </a>
+
+
+          <a href="#" class="additional-card">
+
+            <span class="resource-icon">
+              DOC
+            </span>
+
+            <span>
+
+              <strong>
+                Important Forms & Documents
+              </strong>
+
+              <small>
+                View resources →
+              </small>
+
+            </span>
+
+          </a>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+
+    <div class="container footer-main">
+
+
+      <div class="footer-about">
+
+        <h2>
+          Forest Service Nepal
+        </h2>
+
+        <p>
+          A platform for forestry learning materials, information,
+          news, opportunities, videos and additional resources
+          related to forestry, conservation and education.
+        </p>
+
+      </div>
+
+
+      <div class="footer-social">
+
+        <h3>
+          Connect With Us
+        </h3>
+
+        <div class="social-icons" data-social></div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+      <p>
+        © <span id="copyright-year"></span>
+        Forest Service Nepal. All rights reserved.
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>
